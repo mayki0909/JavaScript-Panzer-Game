@@ -1,0 +1,152 @@
+<!doctype HTML>
+<html>
+	<head>
+		<title>Panzer game</title>
+		<script src="Tank.js"></script>
+		<script src="Input.js"></script>
+		<script src="Fire.js"></script>		
+		<script src="Enemy2.js"></script>
+		
+		<style>
+			h1{
+				font-size: 48px;
+				color:white;
+				
+			}
+			p{	
+				color:white;
+				font-size: 20px;
+				bottom:0px;
+			}
+			body{
+				background-image: url("camo4.jpg");
+				user-select: none; 
+			}
+											
+			#Canvas{
+				positon: absolute;
+				border: 2px solid black;
+				margin-top: 10px;				
+				background-color:#c3b186;
+				display: block;
+				cursor: url(burek.ico), default;
+			}
+			
+		
+		</style>
+	</head>
+	
+	
+	<body>
+	
+		<center>
+		<h1>Panzer<h1>
+		<canvas id="Canvas" width="700" height="500" tabindex="1" >Your browser doesn't support the game. Please use different browser.</canvas>
+		
+		
+		
+			<p>
+			&#169;2017 Website created by: Miha Znidar 
+			<p>
+			
+		
+		</center>
+	 
+	 
+	<script>
+			
+		
+			var canvas = document.getElementById("Canvas");
+			var context = canvas.getContext("2d");
+			var mouseX, mouseY;
+			var ex = 32 + (Math.random() * (canvas.width - 64));
+			var ey = 32 + (Math.random() * (canvas.height - 64));
+			
+			
+			
+			var tank = new Tank(350,250);
+			var input = new Input();
+			var enemy = new Enemy(ex,ey);
+			var time = (6000);
+			var reset = (0);
+			var score = (0);
+			
+			
+			
+			
+			canvas.addEventListener('mousemove', mouseMove);
+			canvas.addEventListener('keydown', keyDown);
+			canvas.addEventListener('keyup', keyUp);
+			canvas.addEventListener('mousedown', mouseDown);
+						
+						
+		
+			
+			function gameLoop(){
+				context.clearRect(0, 0, canvas.width, canvas.height);
+				tank.draw();							
+				tank.update(input, mouseX, mouseY);
+				enemy.draw();
+				
+				
+				drawScore();
+				timer();
+				if(score<=-1){
+					alert("Gameover! Your SCORE:"+ score);	
+					location.reload(true);
+					
+				}
+				
+				if( time < 0){
+					alert("Gameover! Your SCORE:"+ score);					
+					location.reload(true);
+			}
+			
+			
+			function timer(){
+				
+				document.getElementById("time");
+				time-= 1;
+				context.font = "32px Arial";
+				context.fillStyle = "#000000";
+				context.fillText("Time: "+time/100, 500, 30);
+				
+					
+				}											
+			}
+			
+			setInterval(gameLoop,20);
+			
+			
+			
+			
+			function mouseDown(evt){
+				tank.fire();
+				console.log("mouseDown");
+			}
+						
+			function mouseMove(evt){
+				mouseX = evt.x - canvas.getBoundingClientRect() .left;
+				mouseY = evt.y - canvas.getBoundingClientRect() .top;
+			}
+			
+			function keyDown(evt){
+				input.set(evt, true);
+				console.log("keyDown");
+			}
+			function keyUp(evt){
+				input.set(evt, false);
+			}
+			function drawScore(){
+				context.font = "32px Arial";
+				context.fillStyle = "#000000";
+				context.fillText("Score: "+score, 20, 30);
+				
+				
+				
+			}
+
+			
+	</script>
+	</body>
+</html>
